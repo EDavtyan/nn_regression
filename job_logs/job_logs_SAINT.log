@@ -1,0 +1,7 @@
+nohup: ignoring input
+2024-12-18 09:29:51,125 - INFO - Processing dataset: Concrete
+[I 2024-12-18 09:29:51,129] A new study created in memory with name: no-name-a02d9527-daad-43c8-892b-a71f7edb055e
+2024-12-18 09:30:07,702 - INFO - Training time for current run: 15 seconds
+2024-12-18 09:30:23,427 - INFO - Training time for current run: 15 seconds
+2024-12-18 09:30:39,522 - INFO - Training time for current run: 16 seconds
+[I 2024-12-18 09:30:39,561] Trial 0 finished with value: 179.35709546596487 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 2, 'dropout': 0.40229042763550005, 'lr': 0.0012583671407675134, 'batch_size': 16}. Best is trial 0 with value: 179.35709546596487.

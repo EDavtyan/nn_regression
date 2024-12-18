@@ -6,6 +6,8 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import TensorDataset, DataLoader
 import optuna
+import json
+import time
 
 from sklearn.model_selection import train_test_split, KFold
 from sklearn.metrics import mean_squared_error, r2_score
@@ -67,7 +69,7 @@ class SAINT(nn.Module):
         embedded_features = x.unsqueeze(-1) * self.feature_embeddings.unsqueeze(0)
         # Shape: (batch_size, input_dim, embed_dim)
 
-        # Column-wise attention (treat features as tokens)
+        # Column-wise attention
         col_encoded = self.transformer_encoder_cols(embedded_features)  # (batch_size, input_dim, embed_dim)
 
         # Aggregate features using mean pooling
@@ -102,40 +104,47 @@ def train_saint(X_train, y_train, X_test, y_test, params):
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=params['lr'])
 
-    # Training loop
+    # Measure training time for all epochs
+    train_start = time.time()
     for epoch in range(params['epochs']):
         model.train()
-        epoch_loss = 0
         for batch_X, batch_y in train_loader:
             optimizer.zero_grad()
             pred = model(batch_X)
             loss = criterion(pred, batch_y)
             loss.backward()
             optimizer.step()
-            epoch_loss += loss.item()
+    train_end = time.time()
 
-    # Evaluation
+    # Print training time for these epochs (in seconds, no decimals)
+    epoch_training_time = int(train_end - train_start)
+    logger.info(f"Training time for current run: {epoch_training_time} seconds")
+
+    # Evaluation on training and test sets
     model.eval()
     with torch.no_grad():
+        pred_train = model(X_train_t).squeeze(-1).numpy()
+        train_mse = mean_squared_error(y_train, pred_train)
+        train_r2 = r2_score(y_train, pred_train)
+
         pred_test = model(X_test_t).squeeze(-1).numpy()
         test_mse = mean_squared_error(y_test, pred_test)
         test_r2 = r2_score(y_test, pred_test)
 
-    return test_mse, test_r2
+    return train_mse, train_r2, test_mse, test_r2
 
 #############################
 # Hyperparameter Optimization with Optuna
 #############################
 def objective(trial, X, y):
     # Split the data into train and validation sets
-    kfold = KFold(n_splits=3, shuffle=True, random_state=42)
+    kfold = KFold(n_splits=3, shuffle=True)
     scores = []
 
     # Define hyperparameters with constraints
     embed_dim = trial.suggest_categorical('embed_dim', [16, 32, 64])
-    num_heads = trial.suggest_categorical('num_heads', [1, 2, 4, 8])
+    num_heads = trial.suggest_categorical('num_heads', [2, 4, 8])
 
-    # Ensure embed_dim is divisible by num_heads
     if embed_dim % num_heads != 0:
         raise optuna.TrialPruned(f"Invalid combination: embed_dim {embed_dim} is not divisible by num_heads {num_heads}")
 
@@ -153,8 +162,8 @@ def objective(trial, X, y):
         X_train, X_val = X[train_idx], X[val_idx]
         y_train, y_val = y[train_idx], y[val_idx]
 
-        test_mse, _ = train_saint(X_train, y_train, X_val, y_val, params)
-        scores.append(test_mse)
+        _, _, val_mse, _ = train_saint(X_train, y_train, X_val, y_val, params)
+        scores.append(val_mse)
 
     return np.mean(scores)
 
@@ -162,29 +171,57 @@ def objective(trial, X, y):
 # Main Execution
 #############################
 if __name__ == "__main__":
+    overall_start = time.time()  # Start time of entire experiment
+
     datasets = [
-        ("Concrete", load_and_preprocess_concrete)
-        # ("Bank32NH", load_and_preprocess_bank32NH),
-        # ("Delta Elevators", load_and_preprocess_delta_elevators),
-        # ("House 16", load_and_preprocess_house_16),
-        # ("Housing", load_and_preprocess_housing),
-        # ("Insurance", load_and_preprocess_insurance)
+        ("Concrete", load_and_preprocess_concrete),
+        ("Bank32NH", load_and_preprocess_bank32NH),
+        ("Delta Elevators", load_and_preprocess_delta_elevators),
+        ("House 16", load_and_preprocess_house_16),
+        ("Housing", load_and_preprocess_housing),
+        ("Insurance", load_and_preprocess_insurance)
     ]
+
+    results = {}
 
     for dataset_name, loader in datasets:
         logger.info(f"Processing dataset: {dataset_name}")
         try:
             X_train, X_test, y_train, y_test, _ = loader()
 
-            # Hyperparameter optimization
+            # Time the hyperparameter optimization
+            optimize_start = time.time()
             study = optuna.create_study(direction="minimize")
             study.optimize(lambda trial: objective(trial, np.vstack((X_train, X_test)), np.hstack((y_train, y_test))), n_trials=20)
+            optimize_end = time.time()
+
+            optimization_minutes = round((optimize_end - optimize_start) / 60, 1)
+            logger.info(f"Time taken for hyperparameter optimization for {dataset_name}: {optimization_minutes} minutes")
 
             # Train with the best parameters
             best_params = study.best_params
             logger.info(f"Best parameters for {dataset_name}: {best_params}")
 
-            test_mse, test_r2 = train_saint(X_train, y_train, X_test, y_test, best_params)
+            train_mse, train_r2, test_mse, test_r2 = train_saint(X_train, y_train, X_test, y_test, best_params)
+            logger.info(f"Final Train MSE: {train_mse:.4f}, R^2: {train_r2:.4f}")
             logger.info(f"Final Test MSE: {test_mse:.4f}, R^2: {test_r2:.4f}")
+
+            # Store results in JSON
+            results[dataset_name] = {
+                "best_params": best_params,
+                "train_mse": train_mse,
+                "train_r2": train_r2,
+                "test_mse": test_mse,
+                "test_r2": test_r2
+            }
+
+            # Update results.json after processing this dataset
+            with open("results/results_SAINT.json", "w") as f:
+                json.dump(results, f, indent=4)
+
         except Exception as e:
             logger.error(f"Error processing {dataset_name}: {str(e)}")
+
+    overall_end = time.time()
+    total_hours = round((overall_end - overall_start) / 3600, 1)
+    logger.info(f"Total experiment time: {total_hours} hours")
