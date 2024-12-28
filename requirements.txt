@@ -3,3 +3,4 @@ numpy
 scikit-learn
 torch
 optuna
+tab-transformer-pytorch

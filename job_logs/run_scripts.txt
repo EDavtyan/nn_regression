@@ -1,8 +1,6 @@
 # Run file in the remote session
-nohup /home/davtyan.edd/projects/nn_regression/.venv/bin/python /home/davtyan.edd/projects/nn_regression/experiments_SAINT.py > /home/davtyan.edd/projects/nn_regression/job_logs/job_logs_SAINT.log 2>&1 &
 
-nohup /home/davtyan.edd/projects/nn_regression/.venv/bin/python /home/davtyan.edd/projects/nn_regression/experiments_TabTransformer.py > /home/davtyan.edd/projects/nn_regression/job_logs/job_logs_TabTransformer.log.log 2>&1 &
-
+nohup /home/davtyan.edd/projects/nn_regression/.venv/bin/python /home/davtyan.edd/projects/nn_regression/experiments_TabTransformer.py > /home/davtyan.edd/projects/nn_regression/job_logs/job_logs_TabTransformer_low_epochs.log 2>&1 &
 
 # command to list all Python processes
 ps aux | grep python

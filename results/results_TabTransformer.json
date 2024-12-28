@@ -1,0 +1,92 @@
+{
+    "Housing": {
+        "best_params": {
+            "embed_dim": 16,
+            "num_heads": 2,
+            "depth": 3,
+            "dropout": 0.33966429445666646,
+            "lr": 0.008022665080586428,
+            "batch_size": 16,
+            "epochs": 100
+        },
+        "train_mse": 5111950094.903642,
+        "train_r2": 0.6159391349501004,
+        "test_mse": 5749242733.753495,
+        "test_r2": 0.568566858352294
+    },
+    "Insurance": {
+        "best_params": {
+            "embed_dim": 64,
+            "num_heads": 2,
+            "depth": 4,
+            "dropout": 0.1020546570174777,
+            "lr": 0.0019408113547291833,
+            "batch_size": 32,
+            "epochs": 50
+        },
+        "train_mse": 1046174.3847955657,
+        "train_r2": 0.992779255669575,
+        "test_mse": 63284151.833366916,
+        "test_r2": 0.5759979331168812
+    },
+    "Concrete": {
+        "best_params": {
+            "embed_dim": 16,
+            "num_heads": 2,
+            "depth": 3,
+            "dropout": 0.33355418395304887,
+            "lr": 0.00812458060118266,
+            "batch_size": 64,
+            "epochs": 80
+        },
+        "train_mse": 45.7149656444811,
+        "train_r2": 0.8360358064317567,
+        "test_mse": 50.08029432826372,
+        "test_r2": 0.8200750547749491
+    },
+    "House 16": {
+        "best_params": {
+            "embed_dim": 16,
+            "num_heads": 4,
+            "depth": 5,
+            "dropout": 0.37894984681651955,
+            "lr": 0.009864521868478872,
+            "batch_size": 16,
+            "epochs": 100
+        },
+        "train_mse": 2566935246.3584614,
+        "train_r2": 0.10528361229518957,
+        "test_mse": 2330339013.73536,
+        "test_r2": 0.11571179342203719
+    },
+    "Movies": {
+        "best_params": {
+            "embed_dim": 64,
+            "num_heads": 2,
+            "depth": 4,
+            "dropout": 0.1278200960717646,
+            "lr": 0.0007011938208589225,
+            "batch_size": 64,
+            "epochs": 90
+        },
+        "train_mse": 4220072746230697.5,
+        "train_r2": 0.03735974919496987,
+        "test_mse": 2967840105337237.5,
+        "test_r2": 0.019216351648147723
+    },
+    "Bank32NH": {
+        "best_params": {
+            "embed_dim": 32,
+            "num_heads": 8,
+            "depth": 2,
+            "dropout": 0.34163783950169707,
+            "lr": 0.0005486227986361066,
+            "batch_size": 64,
+            "epochs": 100
+        },
+        "train_mse": 0.00034238423119357475,
+        "train_r2": 0.9763024317101425,
+        "test_mse": 0.009221473507396244,
+        "test_r2": 0.397262062053341
+    }
+}

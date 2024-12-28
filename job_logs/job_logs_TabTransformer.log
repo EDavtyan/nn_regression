@@ -1,3 +1,168 @@
 nohup: ignoring input
-2024-12-18 09:29:51,125 - INFO - Processing dataset: Concrete
-[I 2024-12-18 09:29:51,129] A new study created in memory with name: no-name-a02d9527-daad-43c8-892b-a71f7edb055e
+2024-12-27 09:21:52,471 - INFO - Processing dataset: Movies
+[I 2024-12-27 09:21:52,500] A new study created in memory with name: no-name-bb67f138-32d9-49f8-825d-8d331cef81a7
+2024-12-27 09:22:04,140 - INFO - Training time for current run: 10 seconds
+[I 2024-12-27 09:22:04,159] Trial 0 finished with value: 4221787368317755.0 and parameters: {'embed_dim': 64, 'num_heads': 4, 'depth': 2, 'dropout': 0.16670409969941927, 'lr': 0.0005160286394326293, 'batch_size': 64, 'epochs': 40}. Best is trial 0 with value: 4221787368317755.0.
+2024-12-27 09:22:24,303 - INFO - Training time for current run: 20 seconds
+[I 2024-12-27 09:22:24,315] Trial 1 finished with value: 4253577735805933.0 and parameters: {'embed_dim': 16, 'num_heads': 8, 'depth': 3, 'dropout': 0.4181004707801995, 'lr': 0.0038802361660410837, 'batch_size': 32, 'epochs': 40}. Best is trial 0 with value: 4221787368317755.0.
+2024-12-27 09:24:18,927 - INFO - Training time for current run: 114 seconds
+[I 2024-12-27 09:24:18,959] Trial 2 finished with value: 4234099991640594.0 and parameters: {'embed_dim': 64, 'num_heads': 8, 'depth': 5, 'dropout': 0.19073163102813934, 'lr': 0.0018030741016077545, 'batch_size': 16, 'epochs': 70}. Best is trial 0 with value: 4221787368317755.0.
+2024-12-27 09:24:54,964 - INFO - Training time for current run: 36 seconds
+[I 2024-12-27 09:24:54,976] Trial 3 finished with value: 4227904182180732.5 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 6, 'dropout': 0.270498870547383, 'lr': 0.00980233589195669, 'batch_size': 64, 'epochs': 80}. Best is trial 0 with value: 4221787368317755.0.
+2024-12-27 09:26:34,673 - INFO - Training time for current run: 99 seconds
+[I 2024-12-27 09:26:34,686] Trial 4 finished with value: 4240266547850771.5 and parameters: {'embed_dim': 16, 'num_heads': 8, 'depth': 5, 'dropout': 0.2411552010972455, 'lr': 0.0004534569430865336, 'batch_size': 16, 'epochs': 70}. Best is trial 0 with value: 4221787368317755.0.
+2024-12-27 09:26:52,079 - INFO - Training time for current run: 17 seconds
+[I 2024-12-27 09:26:52,096] Trial 5 finished with value: 4287840560350769.5 and parameters: {'embed_dim': 32, 'num_heads': 8, 'depth': 5, 'dropout': 0.40828581284476195, 'lr': 0.0007887956227512393, 'batch_size': 64, 'epochs': 40}. Best is trial 0 with value: 4221787368317755.0.
+2024-12-27 09:27:23,481 - INFO - Training time for current run: 31 seconds
+[I 2024-12-27 09:27:23,490] Trial 6 finished with value: 4229678357308925.5 and parameters: {'embed_dim': 32, 'num_heads': 4, 'depth': 3, 'dropout': 0.3749159427182056, 'lr': 0.00011791175714676392, 'batch_size': 32, 'epochs': 60}. Best is trial 0 with value: 4221787368317755.0.
+2024-12-27 09:28:41,202 - INFO - Training time for current run: 77 seconds
+[I 2024-12-27 09:28:41,239] Trial 7 finished with value: 4223630267512810.0 and parameters: {'embed_dim': 64, 'num_heads': 2, 'depth': 6, 'dropout': 0.4271706970296839, 'lr': 0.0011492896855642624, 'batch_size': 32, 'epochs': 80}. Best is trial 0 with value: 4221787368317755.0.
+2024-12-27 09:29:00,897 - INFO - Training time for current run: 19 seconds
+[I 2024-12-27 09:29:00,911] Trial 8 finished with value: 4378313895380621.5 and parameters: {'embed_dim': 32, 'num_heads': 8, 'depth': 4, 'dropout': 0.49229236310791935, 'lr': 0.00014627392815732624, 'batch_size': 32, 'epochs': 30}. Best is trial 0 with value: 4221787368317755.0.
+2024-12-27 09:30:18,256 - INFO - Training time for current run: 77 seconds
+[I 2024-12-27 09:30:18,265] Trial 9 finished with value: 4226474853133218.5 and parameters: {'embed_dim': 32, 'num_heads': 4, 'depth': 3, 'dropout': 0.22640570635956847, 'lr': 0.00016175306783298678, 'batch_size': 16, 'epochs': 80}. Best is trial 0 with value: 4221787368317755.0.
+2024-12-27 09:30:42,439 - INFO - Training time for current run: 24 seconds
+[I 2024-12-27 09:30:42,454] Trial 10 finished with value: 4220440732669301.0 and parameters: {'embed_dim': 64, 'num_heads': 2, 'depth': 2, 'dropout': 0.1309651534158866, 'lr': 0.0003777776660291604, 'batch_size': 64, 'epochs': 100}. Best is trial 10 with value: 4220440732669301.0.
+2024-12-27 09:31:06,807 - INFO - Training time for current run: 24 seconds
+[I 2024-12-27 09:31:06,822] Trial 11 finished with value: 4223091433948770.5 and parameters: {'embed_dim': 64, 'num_heads': 2, 'depth': 2, 'dropout': 0.10191899746272562, 'lr': 0.0003897893378354939, 'batch_size': 64, 'epochs': 100}. Best is trial 10 with value: 4220440732669301.0.
+2024-12-27 09:31:09,243 - INFO - Training time for current run: 2 seconds
+[I 2024-12-27 09:31:09,258] Trial 12 finished with value: 4311335051454061.5 and parameters: {'embed_dim': 64, 'num_heads': 2, 'depth': 2, 'dropout': 0.10546962630840873, 'lr': 0.00029658927560704634, 'batch_size': 64, 'epochs': 10}. Best is trial 10 with value: 4220440732669301.0.
+2024-12-27 09:31:33,451 - INFO - Training time for current run: 24 seconds
+[I 2024-12-27 09:31:33,466] Trial 13 finished with value: 4221777313990917.5 and parameters: {'embed_dim': 64, 'num_heads': 2, 'depth': 2, 'dropout': 0.1654321278790175, 'lr': 0.000678821674840788, 'batch_size': 64, 'epochs': 100}. Best is trial 10 with value: 4220440732669301.0.
+2024-12-27 09:31:57,668 - INFO - Training time for current run: 24 seconds
+[I 2024-12-27 09:31:57,682] Trial 14 finished with value: 4240827514280863.0 and parameters: {'embed_dim': 64, 'num_heads': 2, 'depth': 2, 'dropout': 0.32481373192342583, 'lr': 0.0015624792328279254, 'batch_size': 64, 'epochs': 100}. Best is trial 10 with value: 4220440732669301.0.
+2024-12-27 09:32:29,295 - INFO - Training time for current run: 31 seconds
+[I 2024-12-27 09:32:29,315] Trial 15 finished with value: 4224048757119616.0 and parameters: {'embed_dim': 64, 'num_heads': 2, 'depth': 3, 'dropout': 0.16074949332108043, 'lr': 0.00023603368117771273, 'batch_size': 64, 'epochs': 100}. Best is trial 10 with value: 4220440732669301.0.
+2024-12-27 09:33:05,123 - INFO - Training time for current run: 35 seconds
+[I 2024-12-27 09:33:05,149] Trial 16 finished with value: 4220440156576803.0 and parameters: {'embed_dim': 64, 'num_heads': 2, 'depth': 4, 'dropout': 0.1278200960717646, 'lr': 0.0007011938208589225, 'batch_size': 64, 'epochs': 90}. Best is trial 16 with value: 4220440156576803.0.
+2024-12-27 09:33:40,718 - INFO - Training time for current run: 35 seconds
+[I 2024-12-27 09:33:40,744] Trial 17 finished with value: 4244385061333812.5 and parameters: {'embed_dim': 64, 'num_heads': 2, 'depth': 4, 'dropout': 0.31478110239406426, 'lr': 0.0024059302119920673, 'batch_size': 64, 'epochs': 90}. Best is trial 16 with value: 4220440156576803.0.
+2024-12-27 09:34:15,873 - INFO - Training time for current run: 35 seconds
+[I 2024-12-27 09:34:15,899] Trial 18 finished with value: 4225741059592332.5 and parameters: {'embed_dim': 64, 'num_heads': 2, 'depth': 4, 'dropout': 0.12808411767285205, 'lr': 0.00023588136286863072, 'batch_size': 64, 'epochs': 90}. Best is trial 16 with value: 4220440156576803.0.
+2024-12-27 09:35:37,348 - INFO - Training time for current run: 81 seconds
+[I 2024-12-27 09:35:37,356] Trial 19 finished with value: 4227432910044781.5 and parameters: {'embed_dim': 16, 'num_heads': 2, 'depth': 5, 'dropout': 0.2114242990239949, 'lr': 0.0010571982329336423, 'batch_size': 16, 'epochs': 60}. Best is trial 16 with value: 4220440156576803.0.
+2024-12-27 09:35:37,356 - INFO - Time taken for hyperparameter optimization for Movies: 13.7 minutes
+2024-12-27 09:35:37,357 - INFO - Best parameters for Movies: {'embed_dim': 64, 'num_heads': 2, 'depth': 4, 'dropout': 0.1278200960717646, 'lr': 0.0007011938208589225, 'batch_size': 64, 'epochs': 90}
+2024-12-27 09:36:12,423 - INFO - Training time for current run: 35 seconds
+2024-12-27 09:36:12,447 - INFO - Final Train MSE: 4220072746230697.5000, R^2: 0.0374
+2024-12-27 09:36:12,457 - INFO - Test MSE: 2967840105337237.5000, R^2: 0.0192
+2024-12-27 09:36:12,457 - INFO - Processing dataset: Concrete
+[I 2024-12-27 09:36:12,462] A new study created in memory with name: no-name-e0723947-5acc-4324-8756-0cc4c68cc752
+2024-12-27 09:36:17,869 - INFO - Training time for current run: 5 seconds
+[I 2024-12-27 09:36:17,878] Trial 0 finished with value: 146.82971030831592 and parameters: {'embed_dim': 64, 'num_heads': 8, 'depth': 5, 'dropout': 0.44854771409533445, 'lr': 0.0002617562664330463, 'batch_size': 32, 'epochs': 30}. Best is trial 0 with value: 146.82971030831592.
+2024-12-27 09:36:29,534 - INFO - Training time for current run: 11 seconds
+[I 2024-12-27 09:36:29,538] Trial 1 finished with value: 45.711226194580114 and parameters: {'embed_dim': 16, 'num_heads': 8, 'depth': 3, 'dropout': 0.11770747068638783, 'lr': 0.0017784641158933407, 'batch_size': 16, 'epochs': 60}. Best is trial 1 with value: 45.711226194580114.
+2024-12-27 09:36:41,173 - INFO - Training time for current run: 11 seconds
+[I 2024-12-27 09:36:41,183] Trial 2 finished with value: 106.70812010795508 and parameters: {'embed_dim': 64, 'num_heads': 8, 'depth': 6, 'dropout': 0.15917522008033577, 'lr': 0.00825498253217184, 'batch_size': 16, 'epochs': 30}. Best is trial 1 with value: 45.711226194580114.
+2024-12-27 09:36:45,397 - INFO - Training time for current run: 4 seconds
+[I 2024-12-27 09:36:45,402] Trial 3 finished with value: 47.77189687829983 and parameters: {'embed_dim': 64, 'num_heads': 8, 'depth': 2, 'dropout': 0.2466392619619994, 'lr': 0.0015433229119843977, 'batch_size': 64, 'epochs': 80}. Best is trial 1 with value: 45.711226194580114.
+2024-12-27 09:36:52,005 - INFO - Training time for current run: 6 seconds
+[I 2024-12-27 09:36:52,010] Trial 4 finished with value: 49.54727003608138 and parameters: {'embed_dim': 32, 'num_heads': 2, 'depth': 6, 'dropout': 0.23845788912542482, 'lr': 0.004845638117490264, 'batch_size': 64, 'epochs': 70}. Best is trial 1 with value: 45.711226194580114.
+2024-12-27 09:36:56,344 - INFO - Training time for current run: 4 seconds
+[I 2024-12-27 09:36:56,351] Trial 5 finished with value: 153.17998566077884 and parameters: {'embed_dim': 64, 'num_heads': 4, 'depth': 4, 'dropout': 0.1718496139113016, 'lr': 0.00013026477326454102, 'batch_size': 32, 'epochs': 30}. Best is trial 1 with value: 45.711226194580114.
+2024-12-27 09:37:05,842 - INFO - Training time for current run: 9 seconds
+[I 2024-12-27 09:37:05,849] Trial 6 finished with value: 140.70167983922016 and parameters: {'embed_dim': 64, 'num_heads': 2, 'depth': 5, 'dropout': 0.3017243939924168, 'lr': 0.000160111132526085, 'batch_size': 16, 'epochs': 30}. Best is trial 1 with value: 45.711226194580114.
+2024-12-27 09:37:13,340 - INFO - Training time for current run: 7 seconds
+[I 2024-12-27 09:37:13,346] Trial 7 finished with value: 193.8302537323109 and parameters: {'embed_dim': 16, 'num_heads': 8, 'depth': 6, 'dropout': 0.17200303442138049, 'lr': 0.00010138515987364554, 'batch_size': 32, 'epochs': 40}. Best is trial 1 with value: 45.711226194580114.
+2024-12-27 09:37:30,018 - INFO - Training time for current run: 16 seconds
+[I 2024-12-27 09:37:30,025] Trial 8 finished with value: 130.98016780804352 and parameters: {'embed_dim': 32, 'num_heads': 8, 'depth': 6, 'dropout': 0.2603187004229882, 'lr': 0.00019548712161232445, 'batch_size': 32, 'epochs': 90}. Best is trial 1 with value: 45.711226194580114.
+2024-12-27 09:37:46,937 - INFO - Training time for current run: 16 seconds
+[I 2024-12-27 09:37:46,942] Trial 9 finished with value: 99.86471394518244 and parameters: {'embed_dim': 16, 'num_heads': 8, 'depth': 4, 'dropout': 0.10792444011640945, 'lr': 0.00024514370734258475, 'batch_size': 16, 'epochs': 70}. Best is trial 1 with value: 45.711226194580114.
+2024-12-27 09:37:48,389 - INFO - Training time for current run: 1 seconds
+[I 2024-12-27 09:37:48,391] Trial 10 finished with value: 131.81655706109953 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 2, 'dropout': 0.36269218865470676, 'lr': 0.0009195674925761032, 'batch_size': 16, 'epochs': 10}. Best is trial 1 with value: 45.711226194580114.
+2024-12-27 09:37:52,620 - INFO - Training time for current run: 4 seconds
+[I 2024-12-27 09:37:52,624] Trial 11 finished with value: 45.65110328608784 and parameters: {'embed_dim': 16, 'num_heads': 8, 'depth': 2, 'dropout': 0.36964861292665, 'lr': 0.0021858408868210763, 'batch_size': 64, 'epochs': 100}. Best is trial 11 with value: 45.65110328608784.
+2024-12-27 09:37:58,196 - INFO - Training time for current run: 5 seconds
+[I 2024-12-27 09:37:58,200] Trial 12 finished with value: 43.55895608175188 and parameters: {'embed_dim': 16, 'num_heads': 8, 'depth': 3, 'dropout': 0.41743082851671504, 'lr': 0.0019240554870087237, 'batch_size': 64, 'epochs': 100}. Best is trial 12 with value: 43.55895608175188.
+2024-12-27 09:38:03,560 - INFO - Training time for current run: 5 seconds
+[I 2024-12-27 09:38:03,563] Trial 13 finished with value: 41.106809786683264 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 3, 'dropout': 0.46919572055446035, 'lr': 0.0030845288167735225, 'batch_size': 64, 'epochs': 100}. Best is trial 13 with value: 41.106809786683264.
+2024-12-27 09:38:08,905 - INFO - Training time for current run: 5 seconds
+[I 2024-12-27 09:38:08,909] Trial 14 finished with value: 43.64403850823977 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 3, 'dropout': 0.46391391597956716, 'lr': 0.003522933709976115, 'batch_size': 64, 'epochs': 100}. Best is trial 13 with value: 41.106809786683264.
+2024-12-27 09:38:13,727 - INFO - Training time for current run: 4 seconds
+[I 2024-12-27 09:38:13,730] Trial 15 finished with value: 70.91767994550581 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 3, 'dropout': 0.49989073930267236, 'lr': 0.000844098953856053, 'batch_size': 64, 'epochs': 90}. Best is trial 13 with value: 41.106809786683264.
+2024-12-27 09:38:20,773 - INFO - Training time for current run: 7 seconds
+[I 2024-12-27 09:38:20,777] Trial 16 finished with value: 68.41253291656311 and parameters: {'embed_dim': 32, 'num_heads': 4, 'depth': 4, 'dropout': 0.4040283462255381, 'lr': 0.0005374475756907697, 'batch_size': 64, 'epochs': 100}. Best is trial 13 with value: 41.106809786683264.
+2024-12-27 09:38:24,982 - INFO - Training time for current run: 4 seconds
+[I 2024-12-27 09:38:24,986] Trial 17 finished with value: 42.794584410681054 and parameters: {'embed_dim': 16, 'num_heads': 2, 'depth': 3, 'dropout': 0.4237911598728425, 'lr': 0.003565880731129472, 'batch_size': 64, 'epochs': 80}. Best is trial 13 with value: 41.106809786683264.
+2024-12-27 09:38:29,163 - INFO - Training time for current run: 4 seconds
+[I 2024-12-27 09:38:29,166] Trial 18 finished with value: 39.09922989729771 and parameters: {'embed_dim': 16, 'num_heads': 2, 'depth': 3, 'dropout': 0.33355418395304887, 'lr': 0.00812458060118266, 'batch_size': 64, 'epochs': 80}. Best is trial 18 with value: 39.09922989729771.
+2024-12-27 09:38:32,389 - INFO - Training time for current run: 3 seconds
+[I 2024-12-27 09:38:32,393] Trial 19 finished with value: 51.930834602123966 and parameters: {'embed_dim': 16, 'num_heads': 2, 'depth': 4, 'dropout': 0.32321911137403986, 'lr': 0.009788322037148635, 'batch_size': 64, 'epochs': 50}. Best is trial 18 with value: 39.09922989729771.
+2024-12-27 09:38:32,393 - INFO - Time taken for hyperparameter optimization for Concrete: 2.3 minutes
+2024-12-27 09:38:32,393 - INFO - Best parameters for Concrete: {'embed_dim': 16, 'num_heads': 2, 'depth': 3, 'dropout': 0.33355418395304887, 'lr': 0.00812458060118266, 'batch_size': 64, 'epochs': 80}
+2024-12-27 09:38:36,557 - INFO - Training time for current run: 4 seconds
+2024-12-27 09:38:36,560 - INFO - Final Train MSE: 45.7150, R^2: 0.8360
+2024-12-27 09:38:36,562 - INFO - Test MSE: 50.0803, R^2: 0.8201
+2024-12-27 09:38:36,563 - INFO - Processing dataset: Bank32NH
+/home/davtyan.edd/projects/nn_regression/utils.py:101: FutureWarning: The 'delim_whitespace' keyword in pd.read_csv is deprecated and will be removed in a future version. Use ``sep='\s+'`` instead
+  train_data = pd.read_csv(
+/home/davtyan.edd/projects/nn_regression/utils.py:105: FutureWarning: The 'delim_whitespace' keyword in pd.read_csv is deprecated and will be removed in a future version. Use ``sep='\s+'`` instead
+  test_data = pd.read_csv(
+/home/davtyan.edd/projects/nn_regression/utils.py:110: FutureWarning: The 'delim_whitespace' keyword in pd.read_csv is deprecated and will be removed in a future version. Use ``sep='\s+'`` instead
+  domain_data = pd.read_csv(
+2024-12-27 09:38:36,598 - ERROR - Error processing Bank32NH: index 32 is out of bounds for axis 1 with size 32
+2024-12-27 09:38:36,598 - INFO - Processing dataset: House 16
+[I 2024-12-27 09:38:36,639] A new study created in memory with name: no-name-10d02d64-6287-4f97-a1af-66b5482bb19e
+2024-12-27 09:38:41,871 - INFO - Training time for current run: 5 seconds
+[I 2024-12-27 09:38:41,875] Trial 0 finished with value: 3135735235.7672787 and parameters: {'embed_dim': 32, 'num_heads': 2, 'depth': 2, 'dropout': 0.1697092034781032, 'lr': 0.0001451548703660605, 'batch_size': 64, 'epochs': 20}. Best is trial 0 with value: 3135735235.7672787.
+2024-12-27 09:38:55,180 - INFO - Training time for current run: 13 seconds
+[I 2024-12-27 09:38:55,184] Trial 1 finished with value: 2573605970.455731 and parameters: {'embed_dim': 32, 'num_heads': 4, 'depth': 4, 'dropout': 0.13962438611146089, 'lr': 0.0003016990491388965, 'batch_size': 32, 'epochs': 30}. Best is trial 1 with value: 2573605970.455731.
+2024-12-27 09:38:59,610 - INFO - Training time for current run: 4 seconds
+[I 2024-12-27 09:38:59,614] Trial 2 finished with value: 2571261774.4934573 and parameters: {'embed_dim': 32, 'num_heads': 8, 'depth': 4, 'dropout': 0.2224457097725035, 'lr': 0.0026346382330115644, 'batch_size': 32, 'epochs': 10}. Best is trial 2 with value: 2571261774.4934573.
+2024-12-27 09:40:03,708 - INFO - Training time for current run: 64 seconds
+[I 2024-12-27 09:40:03,712] Trial 3 finished with value: 2568809101.9030013 and parameters: {'embed_dim': 16, 'num_heads': 8, 'depth': 3, 'dropout': 0.1475936885165146, 'lr': 0.0032842409417654242, 'batch_size': 16, 'epochs': 80}. Best is trial 3 with value: 2568809101.9030013.
+2024-12-27 09:40:11,626 - INFO - Training time for current run: 7 seconds
+[I 2024-12-27 09:40:11,630] Trial 4 finished with value: 2580445353.4612136 and parameters: {'embed_dim': 32, 'num_heads': 2, 'depth': 6, 'dropout': 0.17684270945898564, 'lr': 0.0003725450999725444, 'batch_size': 64, 'epochs': 30}. Best is trial 3 with value: 2568809101.9030013.
+2024-12-27 09:40:20,443 - INFO - Training time for current run: 8 seconds
+[I 2024-12-27 09:40:20,446] Trial 5 finished with value: 2570839253.252715 and parameters: {'embed_dim': 32, 'num_heads': 2, 'depth': 3, 'dropout': 0.16704722098047514, 'lr': 0.0025112743052413304, 'batch_size': 32, 'epochs': 20}. Best is trial 3 with value: 2568809101.9030013.
+2024-12-27 09:40:52,325 - INFO - Training time for current run: 31 seconds
+[I 2024-12-27 09:40:52,329] Trial 6 finished with value: 2567792892.3491955 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 2, 'dropout': 0.23632987671826516, 'lr': 0.004895175406039293, 'batch_size': 16, 'epochs': 40}. Best is trial 6 with value: 2567792892.3491955.
+2024-12-27 09:42:04,141 - INFO - Training time for current run: 71 seconds
+[I 2024-12-27 09:42:04,144] Trial 7 finished with value: 2568704994.8070693 and parameters: {'embed_dim': 64, 'num_heads': 8, 'depth': 2, 'dropout': 0.48201723574125455, 'lr': 0.001314176071873429, 'batch_size': 16, 'epochs': 90}. Best is trial 6 with value: 2567792892.3491955.
+2024-12-27 09:42:21,830 - INFO - Training time for current run: 17 seconds
+[I 2024-12-27 09:42:21,834] Trial 8 finished with value: 2567902980.639167 and parameters: {'embed_dim': 64, 'num_heads': 8, 'depth': 2, 'dropout': 0.33145526545073345, 'lr': 0.0068375647935316084, 'batch_size': 32, 'epochs': 40}. Best is trial 6 with value: 2567792892.3491955.
+2024-12-27 09:43:17,949 - INFO - Training time for current run: 56 seconds
+[I 2024-12-27 09:43:17,952] Trial 9 finished with value: 2550270920.857076 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 4, 'dropout': 0.4324221062714587, 'lr': 0.0030193961993378393, 'batch_size': 16, 'epochs': 70}. Best is trial 9 with value: 2550270920.857076.
+2024-12-27 09:44:14,539 - INFO - Training time for current run: 56 seconds
+[I 2024-12-27 09:44:14,542] Trial 10 finished with value: 2558681688.256017 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 6, 'dropout': 0.45664475179554476, 'lr': 0.0008951139283385994, 'batch_size': 16, 'epochs': 70}. Best is trial 9 with value: 2550270920.857076.
+2024-12-27 09:45:10,963 - INFO - Training time for current run: 56 seconds
+[I 2024-12-27 09:45:10,967] Trial 11 finished with value: 2569739275.553315 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 6, 'dropout': 0.46524558479052797, 'lr': 0.0009348974444348758, 'batch_size': 16, 'epochs': 70}. Best is trial 9 with value: 2550270920.857076.
+2024-12-27 09:45:59,187 - INFO - Training time for current run: 48 seconds
+[I 2024-12-27 09:45:59,190] Trial 12 finished with value: 2572417900.015124 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 5, 'dropout': 0.39515638323072444, 'lr': 0.0009557320373004461, 'batch_size': 16, 'epochs': 60}. Best is trial 9 with value: 2550270920.857076.
+2024-12-27 09:47:19,674 - INFO - Training time for current run: 80 seconds
+[I 2024-12-27 09:47:19,677] Trial 13 finished with value: 2547860896.4931316 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 5, 'dropout': 0.403074561178026, 'lr': 0.009592226429064831, 'batch_size': 16, 'epochs': 100}. Best is trial 13 with value: 2547860896.4931316.
+2024-12-27 09:48:40,085 - INFO - Training time for current run: 80 seconds
+[I 2024-12-27 09:48:40,089] Trial 14 finished with value: 2547055173.630784 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 5, 'dropout': 0.37894984681651955, 'lr': 0.009864521868478872, 'batch_size': 16, 'epochs': 100}. Best is trial 14 with value: 2547055173.630784.
+2024-12-27 09:50:00,259 - INFO - Training time for current run: 80 seconds
+[I 2024-12-27 09:50:00,263] Trial 15 finished with value: 2549019477.764758 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 5, 'dropout': 0.3577409060576749, 'lr': 0.008670898832001691, 'batch_size': 16, 'epochs': 100}. Best is trial 14 with value: 2547055173.630784.
+2024-12-27 09:50:26,603 - INFO - Training time for current run: 26 seconds
+[I 2024-12-27 09:50:26,607] Trial 16 finished with value: 2569612423.9305367 and parameters: {'embed_dim': 64, 'num_heads': 4, 'depth': 5, 'dropout': 0.2939928236662059, 'lr': 0.00910780641905629, 'batch_size': 64, 'epochs': 100}. Best is trial 14 with value: 2547055173.630784.
+2024-12-27 09:51:38,869 - INFO - Training time for current run: 72 seconds
+[I 2024-12-27 09:51:38,872] Trial 17 finished with value: 2568302836.614103 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 5, 'dropout': 0.40325855195228166, 'lr': 0.00495788049500543, 'batch_size': 16, 'epochs': 90}. Best is trial 14 with value: 2547055173.630784.
+2024-12-27 09:52:51,077 - INFO - Training time for current run: 72 seconds
+[I 2024-12-27 09:52:51,080] Trial 18 finished with value: 2575825286.0169497 and parameters: {'embed_dim': 16, 'num_heads': 4, 'depth': 5, 'dropout': 0.3171272690610351, 'lr': 0.009868781932081473, 'batch_size': 16, 'epochs': 90}. Best is trial 14 with value: 2547055173.630784.
+2024-12-27 09:53:17,271 - INFO - Training time for current run: 26 seconds
+[I 2024-12-27 09:53:17,275] Trial 19 finished with value: 2570065515.9978523 and parameters: {'embed_dim': 16, 'num_heads': 2, 'depth': 3, 'dropout': 0.38250481510048606, 'lr': 0.0018959898296166142, 'batch_size': 64, 'epochs': 100}. Best is trial 14 with value: 2547055173.630784.
+2024-12-27 09:53:17,275 - INFO - Time taken for hyperparameter optimization for House 16: 14.7 minutes
+2024-12-27 09:53:17,275 - INFO - Best parameters for House 16: {'embed_dim': 16, 'num_heads': 4, 'depth': 5, 'dropout': 0.37894984681651955, 'lr': 0.009864521868478872, 'batch_size': 16, 'epochs': 100}
+2024-12-27 09:54:37,701 - INFO - Training time for current run: 80 seconds
+2024-12-27 09:54:37,704 - INFO - Final Train MSE: 2566935246.3585, R^2: 0.1053
+2024-12-27 09:54:37,706 - INFO - Test MSE: 2330339013.7354, R^2: 0.1157
+2024-12-27 09:54:37,706 - INFO - Processing dataset: Delta Elevators
+/home/davtyan.edd/projects/nn_regression/utils.py:212: FutureWarning: The 'delim_whitespace' keyword in pd.read_csv is deprecated and will be removed in a future version. Use ``sep='\s+'`` instead
+  domain_data = pd.read_csv(
+/home/davtyan.edd/projects/nn_regression/utils.py:218: FutureWarning: The 'delim_whitespace' keyword in pd.read_csv is deprecated and will be removed in a future version. Use ``sep='\s+'`` instead
+  data = pd.read_csv("datasets/Elevators/delta_elevators.data",
+2024-12-27 09:54:37,715 - ERROR - Error processing Delta Elevators: index 6 is out of bounds for axis 1 with size 6
+2024-12-27 09:54:37,715 - INFO - Processing dataset: Housing
+/home/davtyan.edd/projects/nn_regression/utils.py:288: FutureWarning: A value is trying to be set on a copy of a DataFrame or Series through chained assignment using an inplace method.
+The behavior will change in pandas 3.0. This inplace method will never work because the intermediate object on which we are setting values always behaves as a copy.
+
+For example, when doing 'df[col].method(value, inplace=True)', try using 'df.method({col: value}, inplace=True)' or df[col] = df[col].method(value) instead, to perform the operation inplace on the original object.
+
+
+  data['total_bedrooms'].fillna(data['total_bedrooms'].median(), inplace=True)
+2024-12-27 09:54:37,733 - ERROR - Error processing Housing: ufunc 'isnan' not supported for the input types, and the inputs could not be safely coerced to any supported types according to the casting rule ''safe''
+2024-12-27 09:54:37,735 - INFO - Processing dataset: Insurance
+2024-12-27 09:54:37,740 - ERROR - Error processing Insurance: NaN values found in Insurance dataset after splitting.
+2024-12-27 09:54:37,740 - INFO - Total experiment time: 0.5 hours

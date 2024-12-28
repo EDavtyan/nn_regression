@@ -1,0 +1,107 @@
+{
+    "Movies": {
+        "best_params": {
+            "embed_dim": 64,
+            "num_heads": 2,
+            "depth": 4,
+            "dropout": 0.10438239790292765,
+            "lr": 0.0012829567193005445,
+            "batch_size": 32,
+            "epochs": 35
+        },
+        "train_mse": 4010519040978142.0,
+        "train_r2": 0.035686504122665386,
+        "test_mse": 3390595115167300.0,
+        "test_r2": 0.02647713794441564
+    },
+    "Concrete": {
+        "best_params": {
+            "embed_dim": 16,
+            "num_heads": 8,
+            "depth": 6,
+            "dropout": 0.14142732749249548,
+            "lr": 0.00947558370517207,
+            "batch_size": 32,
+            "epochs": 35
+        },
+        "train_mse": 47.45036981398248,
+        "train_r2": 0.8284952351407155,
+        "test_mse": 42.82604176953738,
+        "test_r2": 0.8485670042512998
+    },
+    "Bank32NH": {
+        "best_params": {
+            "embed_dim": 32,
+            "num_heads": 8,
+            "depth": 3,
+            "dropout": 0.3465604956565296,
+            "lr": 0.0005474019705598888,
+            "batch_size": 32,
+            "epochs": 35
+        },
+        "train_mse": 0.0005887435497597533,
+        "train_r2": 0.9592510717359619,
+        "test_mse": 0.010147405534872535,
+        "test_r2": 0.33674089258165085
+    },
+    "House 16": {
+        "best_params": {
+            "embed_dim": 16,
+            "num_heads": 4,
+            "depth": 6,
+            "dropout": 0.3244420755552904,
+            "lr": 0.006198704821327035,
+            "batch_size": 32,
+            "epochs": 35
+        },
+        "train_mse": 2487596407.346872,
+        "train_r2": 0.09760436796642002,
+        "test_mse": 2546387474.7513423,
+        "test_r2": 0.1110091316462547
+    },
+    "Delta Elevators": {
+        "best_params": {
+            "embed_dim": 32,
+            "num_heads": 4,
+            "depth": 2,
+            "dropout": 0.15988528840562713,
+            "lr": 0.0004618297508734531,
+            "batch_size": 16,
+            "epochs": 25
+        },
+        "train_mse": 7.229117521334102e-06,
+        "train_r2": -0.2660801919554956,
+        "test_mse": 7.140743703073732e-06,
+        "test_r2": -0.30094733755942693
+    },
+    "Housing": {
+        "best_params": {
+            "embed_dim": 16,
+            "num_heads": 4,
+            "depth": 5,
+            "dropout": 0.18255006673546342,
+            "lr": 0.0066029685764809306,
+            "batch_size": 16,
+            "epochs": 35
+        },
+        "train_mse": 5758555175.617234,
+        "train_r2": 0.5673596883525875,
+        "test_mse": 6061579876.727735,
+        "test_r2": 0.5451285376747692
+    },
+    "Insurance": {
+        "best_params": {
+            "embed_dim": 64,
+            "num_heads": 4,
+            "depth": 5,
+            "dropout": 0.10310598640786553,
+            "lr": 0.0019672408077259715,
+            "batch_size": 64,
+            "epochs": 35
+        },
+        "train_mse": 51919933.43768292,
+        "train_r2": 0.6456114958585517,
+        "test_mse": 55224880.2928799,
+        "test_r2": 0.6231532296466221
+    }
+}

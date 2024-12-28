@@ -1,24 +1,25 @@
-import pandas as pd
-import numpy as np
+import json
 import logging
+import os
+import time
+
+import numpy as np
+import optuna
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.data import TensorDataset, DataLoader
-import optuna
-import json
-import time
-
-from sklearn.model_selection import train_test_split, KFold
 from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import LabelEncoder
+from tab_transformer_pytorch import TabTransformer
+from torch.utils.data import DataLoader, TensorDataset
 from utils import (
-    load_and_preprocess_concrete,
     load_and_preprocess_bank32NH,
+    load_and_preprocess_concrete,
     load_and_preprocess_delta_elevators,
     load_and_preprocess_house_16,
     load_and_preprocess_housing,
-    load_and_preprocess_insurance
+    load_and_preprocess_insurance,
+    load_and_preprocess_movies
 )
 
 #############################
@@ -32,192 +33,303 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 #############################
-# SAINT Model Definition
+# Global Setting for Iterations
 #############################
-class SAINT(nn.Module):
-    def __init__(
-        self,
-        input_dim,
-        embed_dim=32,
-        depth=4,
-        num_heads=4,
-        dropout=0.1,
-        use_inter_sample_attention=False
-    ):
-        super(SAINT, self).__init__()
-        self.embed_dim = embed_dim
-        self.use_inter_sample_attention = use_inter_sample_attention
+NUM_ITERATIONS = 15  # <--- How many times to run each dataset
 
-        # Learnable embedding matrix for each feature
-        self.feature_embeddings = nn.Parameter(torch.randn(input_dim, embed_dim))
-        nn.init.xavier_uniform_(self.feature_embeddings)
+#############################
+# Helper Function for Encoding
+#############################
+def preprocess_data_for_tab_transformer(X_train, X_test, column_names, categorical_threshold=15):
+    cat_indices = []
+    num_indices = []
 
-        # Transformer encoder for column-wise attention
-        encoder_layer_cols = nn.TransformerEncoderLayer(
-            d_model=embed_dim, nhead=num_heads, dropout=dropout, batch_first=True
-        )
-        self.transformer_encoder_cols = nn.TransformerEncoder(encoder_layer_cols, num_layers=depth)
+    # Identify categorical vs numerical columns
+    for i, col in enumerate(column_names):
+        try:
+            temp = X_train[:, i].astype(float)
+            unique_vals = np.unique(temp)
+            if len(unique_vals) < categorical_threshold:
+                cat_indices.append(i)
+            else:
+                num_indices.append(i)
+        except ValueError:
+            cat_indices.append(i)
 
-        # Final regression head
-        self.fc = nn.Linear(embed_dim, 1)
+    encoders = {}
+    for i in cat_indices:
+        all_vals = np.concatenate([X_train[:, i], X_test[:, i]])
+        all_vals_str = all_vals.astype(str)
+        le = LabelEncoder()
+        le.fit(all_vals_str)
+        X_train[:, i] = le.transform(X_train[:, i].astype(str))
+        X_test[:, i] = le.transform(X_test[:, i].astype(str))
+        encoders[i] = le
 
-    def forward(self, x):
-        # Input: x -> (batch_size, input_dim)
-        batch_size, input_dim = x.size()
+    # Ensure correct dtypes
+    for i in num_indices:
+        X_train[:, i] = X_train[:, i].astype(float)
+        X_test[:, i] = X_test[:, i].astype(float)
 
-        # Embed features: Multiply input values with learnable embeddings
-        embedded_features = x.unsqueeze(-1) * self.feature_embeddings.unsqueeze(0)
-        # Shape: (batch_size, input_dim, embed_dim)
+    # Construct categorical and numerical arrays
+    if cat_indices:
+        categoricals_train = X_train[:, cat_indices].astype(int)
+        categoricals_test = X_test[:, cat_indices].astype(int)
+    else:
+        categoricals_train = np.empty((X_train.shape[0], 0), dtype=int)
+        categoricals_test = np.empty((X_test.shape[0], 0), dtype=int)
 
-        # Column-wise attention
-        col_encoded = self.transformer_encoder_cols(embedded_features)  # (batch_size, input_dim, embed_dim)
+    if num_indices:
+        numericals_train = X_train[:, num_indices].astype(float)
+        numericals_test = X_test[:, num_indices].astype(float)
+    else:
+        numericals_train = np.empty((X_train.shape[0], 0), dtype=float)
+        numericals_test = np.empty((X_test.shape[0], 0), dtype=float)
 
-        # Aggregate features using mean pooling
-        pooled = col_encoded.mean(dim=1)  # Shape: (batch_size, embed_dim)
+    cat_cardinalities = []
+    for i in cat_indices:
+        if i in encoders:
+            cat_cardinalities.append(len(encoders[i].classes_))
+        else:
+            cat_cardinalities.append(int(np.max(X_train[:, i])) + 1)
 
-        # Predict regression target
-        out = self.fc(pooled)  # Shape: (batch_size, 1)
-        return out
+    return categoricals_train, numericals_train, categoricals_test, numericals_test, cat_cardinalities
 
 #############################
 # Training and Evaluation
 #############################
-def train_saint(X_train, y_train, X_test, y_test, params):
-    # Convert to tensors
-    X_train_t = torch.tensor(X_train, dtype=torch.float32)
-    y_train_t = torch.tensor(y_train, dtype=torch.float32).unsqueeze(-1)
-    X_test_t = torch.tensor(X_test, dtype=torch.float32)
-    y_test_t = torch.tensor(y_test, dtype=torch.float32).unsqueeze(-1)
+def train_tabtransformer(categoricals, numericals, y, params, cat_cardinalities):
+    """
+    Train the TabTransformer on the provided dataset.
+    Returns the trained model.
+    """
+    categoricals_t = torch.tensor(categoricals, dtype=torch.long)
+    numericals_t = torch.tensor(numericals, dtype=torch.float32)
+    y_t = torch.tensor(y, dtype=torch.float32).unsqueeze(-1)
 
-    train_dataset = TensorDataset(X_train_t, y_train_t)
-    train_loader = DataLoader(train_dataset, batch_size=params['batch_size'], shuffle=True)
+    dataset = TensorDataset(categoricals_t, numericals_t, y_t)
+    dataloader = DataLoader(dataset, batch_size=params["batch_size"], shuffle=True)
 
-    # Initialize model
-    model = SAINT(
-        input_dim=X_train.shape[1],
-        embed_dim=params['embed_dim'],
-        depth=params['depth'],
-        num_heads=params['num_heads'],
-        dropout=params['dropout']
+    if params["embed_dim"] % params["num_heads"] != 0:
+        raise ValueError(f"embed_dim {params['embed_dim']} must be divisible by num_heads {params['num_heads']}")
+
+    model = TabTransformer(
+        categories=cat_cardinalities,
+        num_continuous=numericals.shape[1],
+        dim=params["embed_dim"],
+        dim_out=1,
+        depth=params["depth"],
+        heads=params["num_heads"],
+        attn_dropout=params["dropout"],
+        ff_dropout=params["dropout"]
     )
 
     criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=params['lr'])
+    optimizer = optim.Adam(model.parameters(), lr=params["lr"])
 
-    # Measure training time for all epochs
     train_start = time.time()
-    for epoch in range(params['epochs']):
-        model.train()
-        for batch_X, batch_y in train_loader:
+    model.train()
+    for epoch in range(params["epochs"]):
+        for cat_batch, num_batch, y_batch in dataloader:
             optimizer.zero_grad()
-            pred = model(batch_X)
-            loss = criterion(pred, batch_y)
+            preds = model(cat_batch, num_batch)
+            loss = criterion(preds, y_batch)
             loss.backward()
             optimizer.step()
     train_end = time.time()
 
-    # Print training time for these epochs (in seconds, no decimals)
-    epoch_training_time = int(train_end - train_start)
-    logger.info(f"Training time for current run: {epoch_training_time} seconds")
+    logger.info(f"Training time for current run: {int(train_end - train_start)} seconds")
 
-    # Evaluation on training and test sets
+    return model
+
+def evaluate_model(model, categoricals, numericals, y):
+    """
+    Evaluate the trained model on given data.
+    Returns MSE and R^2.
+    """
     model.eval()
     with torch.no_grad():
-        pred_train = model(X_train_t).squeeze(-1).numpy()
-        train_mse = mean_squared_error(y_train, pred_train)
-        train_r2 = r2_score(y_train, pred_train)
+        categoricals_t = torch.tensor(categoricals, dtype=torch.long)
+        numericals_t = torch.tensor(numericals, dtype=torch.float32)
+        preds = model(categoricals_t, numericals_t).squeeze(-1).numpy()
 
-        pred_test = model(X_test_t).squeeze(-1).numpy()
-        test_mse = mean_squared_error(y_test, pred_test)
-        test_r2 = r2_score(y_test, pred_test)
+        if np.isnan(preds).any():
+            raise ValueError("Model predictions contain NaN values.")
 
-    return train_mse, train_r2, test_mse, test_r2
+        mse = mean_squared_error(y, preds)
+        r2 = r2_score(y, preds)
+    return mse, r2
 
 #############################
 # Hyperparameter Optimization with Optuna
 #############################
-def objective(trial, X, y):
-    # Split the data into train and validation sets
-    kfold = KFold(n_splits=3, shuffle=True)
-    scores = []
-
-    # Define hyperparameters with constraints
-    embed_dim = trial.suggest_categorical('embed_dim', [16, 32, 64])
-    num_heads = trial.suggest_categorical('num_heads', [2, 4, 8])
-
+def objective(trial, categoricals, numericals, y, cat_cardinalities):
+    embed_dim = trial.suggest_categorical("embed_dim", [16, 32, 64])
+    num_heads = trial.suggest_categorical("num_heads", [2, 4, 8])
     if embed_dim % num_heads != 0:
-        raise optuna.TrialPruned(f"Invalid combination: embed_dim {embed_dim} is not divisible by num_heads {num_heads}")
+        # If not divisible, prune trial
+        raise optuna.TrialPruned(
+            f"Invalid combination: embed_dim {embed_dim} not divisible by num_heads {num_heads}"
+        )
 
     params = {
-        'embed_dim': embed_dim,
-        'depth': trial.suggest_int('depth', 2, 6),
-        'num_heads': num_heads,
-        'dropout': trial.suggest_float('dropout', 0.1, 0.5),
-        'lr': trial.suggest_float('lr', 1e-4, 1e-2, log=True),
-        'batch_size': trial.suggest_categorical('batch_size', [16, 32, 64]),
-        'epochs': 50
+        "embed_dim": embed_dim,
+        "depth": trial.suggest_int("depth", 2, 6),
+        "num_heads": num_heads,
+        "dropout": trial.suggest_float("dropout", 0.1, 0.5),
+        "lr": trial.suggest_float("lr", 1e-4, 1e-2, log=True),
+        "batch_size": trial.suggest_categorical("batch_size", [16, 32, 64]),
+        "epochs": trial.suggest_int("epochs", 5, 35, step=10)
     }
 
-    for train_idx, val_idx in kfold.split(X):
-        X_train, X_val = X[train_idx], X[val_idx]
-        y_train, y_val = y[train_idx], y[val_idx]
-
-        _, _, val_mse, _ = train_saint(X_train, y_train, X_val, y_val, params)
-        scores.append(val_mse)
-
-    return np.mean(scores)
+    model = train_tabtransformer(categoricals, numericals, y, params, cat_cardinalities)
+    mse, _ = evaluate_model(model, categoricals, numericals, y)
+    return mse
 
 #############################
 # Main Execution
 #############################
 if __name__ == "__main__":
-    overall_start = time.time()  # Start time of entire experiment
+    overall_start = time.time()  # Start time of the entire experiment
 
     datasets = [
+        ("Movies", load_and_preprocess_movies),
         ("Concrete", load_and_preprocess_concrete),
         ("Bank32NH", load_and_preprocess_bank32NH),
-        ("Delta Elevators", load_and_preprocess_delta_elevators),
         ("House 16", load_and_preprocess_house_16),
+        ("Delta Elevators", load_and_preprocess_delta_elevators),
         ("Housing", load_and_preprocess_housing),
-        ("Insurance", load_and_preprocess_insurance)
+        ("Insurance", load_and_preprocess_insurance),
     ]
 
-    results = {}
+    # Load existing results if they exist
+    results_path = f"results/results_TabTransformer_low_epochs_{NUM_ITERATIONS}_itterations.json"
+    if os.path.exists(results_path):
+        with open(results_path, "r") as f:
+            results = json.load(f)
+    else:
+        results = {}
 
     for dataset_name, loader in datasets:
         logger.info(f"Processing dataset: {dataset_name}")
+
         try:
-            X_train, X_test, y_train, y_test, _ = loader()
+            X_train, X_test, y_train, y_test, column_names = loader()
 
-            # Time the hyperparameter optimization
-            optimize_start = time.time()
-            study = optuna.create_study(direction="minimize")
-            study.optimize(lambda trial: objective(trial, np.vstack((X_train, X_test)), np.hstack((y_train, y_test))), n_trials=20)
-            optimize_end = time.time()
+            (categoricals_train, numericals_train,
+             categoricals_test, numericals_test,
+             cat_cardinalities) = preprocess_data_for_tab_transformer(
+                 X_train, X_test, column_names
+             )
 
-            optimization_minutes = round((optimize_end - optimize_start) / 60, 1)
-            logger.info(f"Time taken for hyperparameter optimization for {dataset_name}: {optimization_minutes} minutes")
+            # Create a sub-dict in results if it doesn't exist yet
+            if dataset_name not in results:
+                results[dataset_name] = {}
 
-            # Train with the best parameters
-            best_params = study.best_params
-            logger.info(f"Best parameters for {dataset_name}: {best_params}")
+            # Run multiple iterations
+            for iteration_idx in range(1, NUM_ITERATIONS + 1):
+                iteration_key = f"Iteration_{iteration_idx}"
 
-            train_mse, train_r2, test_mse, test_r2 = train_saint(X_train, y_train, X_test, y_test, best_params)
-            logger.info(f"Final Train MSE: {train_mse:.4f}, R^2: {train_r2:.4f}")
-            logger.info(f"Final Test MSE: {test_mse:.4f}, R^2: {test_r2:.4f}")
+                # Check if the current iteration already exists in JSON
+                if iteration_key in results[dataset_name]:
+                    logger.info(
+                        f"{dataset_name}: {iteration_key} already exists in the JSON. Skipping..."
+                    )
+                    continue
 
-            # Store results in JSON
-            results[dataset_name] = {
-                "best_params": best_params,
-                "train_mse": train_mse,
-                "train_r2": train_r2,
-                "test_mse": test_mse,
-                "test_r2": test_r2
-            }
+                logger.info(f"  Iteration {iteration_idx} for {dataset_name}")
 
-            # Update results.json after processing this dataset
-            with open("results/results_SAINT.json", "w") as f:
-                json.dump(results, f, indent=4)
+                # Time the hyperparameter optimization for this iteration
+                optimize_start = time.time()
+                study = optuna.create_study(direction="minimize")
+                study.optimize(
+                    lambda trial: objective(trial, categoricals_train, numericals_train, y_train, cat_cardinalities), 
+                    n_trials=20
+                )
+                optimize_end = time.time()
+                optimization_minutes = round((optimize_end - optimize_start) / 60, 1)
+
+                logger.info(f"  Time taken for hyperparameter optimization: {optimization_minutes} minutes")
+
+                best_params = study.best_params
+                logger.info(f"  Best parameters: {best_params}")
+
+                # Train final model with best params
+                final_model = train_tabtransformer(
+                    categoricals_train, numericals_train, y_train, best_params, cat_cardinalities
+                )
+
+                # Evaluate on train
+                train_mse, train_r2 = evaluate_model(
+                    final_model, categoricals_train, numericals_train, y_train
+                )
+                logger.info(f"  Final Train MSE: {train_mse:.4f}, R^2: {train_r2:.4f}")
+
+                # Evaluate on test
+                test_mse, test_r2 = evaluate_model(
+                    final_model, categoricals_test, numericals_test, y_test
+                )
+                logger.info(f"  Test MSE: {test_mse:.4f}, R^2: {test_r2:.4f}")
+
+                # Store iteration results
+                results[dataset_name][iteration_key] = {
+                    "best_params": best_params,
+                    "train_mse": train_mse,
+                    "train_r2": train_r2,
+                    "test_mse": test_mse,
+                    "test_r2": test_r2,
+                }
+
+                # Save results to JSON each time
+                if not os.path.exists("results"):
+                    os.makedirs("results")
+                with open(results_path, "w") as f:
+                    json.dump(results, f, indent=4)
+
+            # ----------------------------
+            # AFTER all iterations for this dataset, 
+            # average results across runs that were completed.
+            # ----------------------------
+            iteration_keys = [
+                k for k in results[dataset_name].keys()
+                if k.startswith("Iteration_")
+            ]
+
+            if iteration_keys:  # Only compute averages if we actually have data
+                total_train_mse = 0.0
+                total_train_r2 = 0.0
+                total_test_mse = 0.0
+                total_test_r2 = 0.0
+
+                for k in iteration_keys:
+                    run_data = results[dataset_name][k]
+                    total_train_mse += run_data["train_mse"]
+                    total_train_r2 += run_data["train_r2"]
+                    total_test_mse += run_data["test_mse"]
+                    total_test_r2 += run_data["test_r2"]
+
+                num_runs = len(iteration_keys)
+                avg_train_mse = total_train_mse / num_runs
+                avg_train_r2 = total_train_r2 / num_runs
+                avg_test_mse = total_test_mse / num_runs
+                avg_test_r2 = total_test_r2 / num_runs
+
+                # Store the averaged metrics
+                results[dataset_name]["average_across_runs"] = {
+                    "num_runs": num_runs,
+                    "avg_train_mse": avg_train_mse,
+                    "avg_train_r2": avg_train_r2,
+                    "avg_test_mse": avg_test_mse,
+                    "avg_test_r2": avg_test_r2
+                }
+
+                logger.info(f"Averaged results for {dataset_name}:")
+                logger.info(f"  Average Train MSE: {avg_train_mse:.4f}, R^2: {avg_train_r2:.4f}")
+                logger.info(f"  Average Test MSE: {avg_test_mse:.4f}, R^2: {avg_test_r2:.4f}")
+
+                # Save again after we compute the averages
+                with open(results_path, "w") as f:
+                    json.dump(results, f, indent=4)
 
         except Exception as e:
             logger.error(f"Error processing {dataset_name}: {str(e)}")
